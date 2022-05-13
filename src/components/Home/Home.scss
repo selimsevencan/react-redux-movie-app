@@ -1,0 +1,16 @@
+.movies-container {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, 2fr);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+
+  input {
+    width: 300px;
+    margin: 0 16px; 
+  }
+}

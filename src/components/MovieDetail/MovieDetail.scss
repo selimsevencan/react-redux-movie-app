@@ -1,0 +1,14 @@
+.movie-detail {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+
+  .movie-info {
+    padding: 16px;
+    width: 50%;
+    background-color: black;
+    color: white;
+    margin-left: 50px;
+    border-radius: 4px;
+  }
+}
