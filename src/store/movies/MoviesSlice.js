@@ -3,8 +3,8 @@ import { fetchData } from "../../utils/helpers";
 
 export const fetchMovies = createAsyncThunk(
   "movies/fetchMovies",
-  async ({name, pageNumber, year, type, season, episode}) => {
-    const isEpisode = type === 'episode';
+  async ({ name, pageNumber, year, type, season, episode }) => {
+    const isEpisode = type === "episode";
     const querySearchName = isEpisode ? `t=${name}` : `s=${name}`;
     let query = `&${querySearchName}&page=${pageNumber}&type=${type}`;
 
@@ -27,8 +27,8 @@ export const fetchMovies = createAsyncThunk(
 const initialState = {
   movies: {
     data: [],
-    loading: true,
-  },
+    loading: true
+  }
 };
 
 const movieSlice = createSlice({
@@ -37,31 +37,31 @@ const movieSlice = createSlice({
   extraReducers: {
     [fetchMovies.pending]: (state) => {
       return {
-        ...state, 
+        ...state,
         movies: {
           data: [],
-          loading: true,
-        }
-      }
-    },
-    [fetchMovies.fulfilled]: (state, { payload }) => {
-      return {
-          ...state, 
-          movies: {
-            data: payload,
-            loading: false,
-          }
-        };
-    },
-    [fetchMovies.rejected]: (state, { payload}) => {
-      return {
-        ...state, 
-        movies: {
-          data: payload,
-          loading: false,
+          loading: true
         }
       };
     },
+    [fetchMovies.fulfilled]: (state, { payload }) => {
+      return {
+        ...state,
+        movies: {
+          data: payload,
+          loading: false
+        }
+      };
+    },
+    [fetchMovies.rejected]: (state, { payload }) => {
+      return {
+        ...state,
+        movies: {
+          data: payload,
+          loading: false
+        }
+      };
+    }
   }
 });
 

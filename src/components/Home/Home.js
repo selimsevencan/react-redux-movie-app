@@ -1,37 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMovies, getAllMovies } from "../../store/movies/MoviesSlice.js";
 import "./Home.scss";
 
-import { Table, Button, Input, Select } from 'antd';
+import { Table, Button, Input, Select } from "antd";
 const { Option } = Select;
 
 const defaultname = "Pokemon";
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'Title',
-    key: 'imdbID',
-    render: (Title, Search) => <Link to={`/movie/${Search.imdbID}`}>{Title}</Link>,
+    title: "Name",
+    dataIndex: "Title",
+    key: "imdbID",
+    render: (Title, Search) => (
+      <Link to={`/movie/${Search.imdbID}`}>{Title}</Link>
+    )
   },
   {
-    title: 'Release Time',
-    key: 'imdbID',
-    dataIndex: 'Year',
+    title: "Release Time",
+    key: "imdbID",
+    dataIndex: "Year",
     render: (Year, Episodes) => {
-      return <span>{Year || Episodes.Released}</span>
+      return <span>{Year || Episodes.Released}</span>;
     }
   },
   {
-    title: 'Id',
-    dataIndex: 'imdbID',
-    key: 'imdbID',
-  },
+    title: "Id",
+    dataIndex: "imdbID",
+    key: "imdbID"
+  }
 ];
 
-const types = ['movie', 'series', 'episode'];
+const types = ["movie", "series", "episode"];
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -43,84 +45,82 @@ const Home = () => {
   const [episode, setEpisode] = useState(0);
   const [year, setYear] = useState(null);
   const [name, setName] = useState(defaultname);
-  const [type, setType] = useState('movie');
-  const isEpisode = type === 'episode';
+  const [type, setType] = useState("movie");
+  const isEpisode = type === "episode";
 
-  const { 
-    movies: {
-      loading, data
-    } 
+  const {
+    movies: { loading, data }
   } = movies;
 
-  useEffect(() => {    
-    dispatch(fetchMovies({name, pageNumber: 1, year, type }));
-  }, []);
-  
   useEffect(() => {
-    if (data.Type === 'episode') {
-      navigate(`/movie/${data.imdbID}`)
+    dispatch(fetchMovies({ name, pageNumber: 1, year, type }));
+  }, []);
+
+  useEffect(() => {
+    if (data.Type === "episode") {
+      navigate(`/movie/${data.imdbID}`);
     }
   }, [data]);
 
   const onPageChange = (current, pageSize) => {
-    setCurrentPage(current)
-    const payload = {name, pageNumber: current, year, type, season, episode}
+    setCurrentPage(current);
+    const payload = { name, pageNumber: current, year, type, season, episode };
     dispatch(fetchMovies(payload));
-  }
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (!name) return alert(`Please enter a ${!isEpisode ? type : 'series'} name!`);
+    if (!name)
+      return alert(`Please enter a ${!isEpisode ? type : "series"} name!`);
     if (isEpisode && !season) return alert(`Please enter a season number!`);
     setCurrentPage(1);
     const payload = {
-      name, pageNumber: 1, year, type, season, episode
-    }
+      name,
+      pageNumber: 1,
+      year,
+      type,
+      season,
+      episode
+    };
     dispatch(fetchMovies(payload));
-  }
+  };
 
   return (
     <div>
       <div className="search-bar">
         <Select
           defaultValue={type}
-          style={{ width: 200, textTransform: 'capitalize' }} 
+          style={{ width: 200, textTransform: "capitalize" }}
           onChange={(value) => {
             setType(value);
-            setName('');
+            setName("");
           }}
         >
-          {
-            types.map(type => {
-              return (
-                <Option 
-                  style={{ textTransform: 'capitalize' }}
-                  value={type}
-                >
-                  {type}
-                </Option>
-              )
-            })
-          }
+          {types.map((type) => {
+            return (
+              <Option style={{ textTransform: "capitalize" }} value={type}>
+                {type}
+              </Option>
+            );
+          })}
         </Select>
-        {
-          isEpisode &&
+        {isEpisode && (
           <>
-             <Input
+            <Input
               type="number"
               placeholder={`Enter a season number`}
               onChange={(e) => setSeason(e.target.value)}
             />
             <Input
               type="number"
-              placeholder={'Enter an episode number'}
+              placeholder={"Enter an episode number"}
               onChange={(e) => setEpisode(e.target.value)}
             />
           </>
-        }
+        )}
         <Input
           type="text"
-          placeholder={`Enter a ${!isEpisode ? type : 'series'} name`}
+          placeholder={`Enter a ${!isEpisode ? type : "series"} name`}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -134,13 +134,13 @@ const Home = () => {
           Search
         </Button>
       </div>
-      <Table 
-        columns={columns} 
+      <Table
+        columns={columns}
         showHeader
         loading={loading}
         bordered
-        dataSource={data.Episodes || data.Search} 
-        style={{padding: 16}}
+        dataSource={data.Episodes || data.Search}
+        style={{ padding: 16 }}
         pagination={{
           total: data.totalResults,
           showSizeChanger: false,

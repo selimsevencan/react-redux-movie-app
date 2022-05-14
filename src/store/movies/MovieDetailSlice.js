@@ -12,8 +12,8 @@ export const fetchMovieDetail = createAsyncThunk(
 const initialState = {
   selectedMovie: {
     data: [],
-    loading: true,
-  },
+    loading: true
+  }
 };
 
 const movieDetailSlice = createSlice({
@@ -22,32 +22,33 @@ const movieDetailSlice = createSlice({
   extraReducers: {
     [fetchMovieDetail.pending]: (state) => {
       return {
-        ...state, 
+        ...state,
         selectedMovie: {
           data: [],
-          loading: true,
+          loading: true
         }
-      }
+      };
     },
     [fetchMovieDetail.fulfilled]: (state, { payload }) => {
-      return {...state, 
+      return {
+        ...state,
         selectedMovie: {
           data: payload,
-          loading: false,
+          loading: false
         }
       };
     },
-    [fetchMovieDetail.rejected]: (state, { payload}) => {
+    [fetchMovieDetail.rejected]: (state, { payload }) => {
       return {
-        ...state, 
+        ...state,
         selectedMovie: {
           data: [],
-          loading: false,
+          loading: false
         }
       };
-    },
+    }
   }
 });
 
-export const getSelectedMovie= (state) => state.movieDetail.selectedMovie;
+export const getSelectedMovie = (state) => state.movieDetail.selectedMovie;
 export default movieDetailSlice.reducer;
