@@ -1,14 +1,25 @@
 .movie-detail {
+  padding: 24px;
   display: flex;
-  align-items: flex-start;
-  padding: 16px;
 
   .movie-info {
     padding: 16px;
-    width: 50%;
     background-color: black;
     color: white;
     margin-left: 50px;
     border-radius: 4px;
+  }
+  
+  .movie-image {
+    object-fit: cover;
+    border-radius: 4px;
+  }
+}
+
+.site-page-header {
+  background-color: black !important;
+  color: white  !important;
+  span {
+    color: white;
   }
 }

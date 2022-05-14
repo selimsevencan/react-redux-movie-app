@@ -37,8 +37,9 @@ const types = ["movie", "series", "episode"];
 
 const Home = () => {
   const dispatch = useDispatch();
-  const movies = useSelector(getAllMovies);
   const navigate = useNavigate();
+  const movies = useSelector(getAllMovies);
+  const { loading, data } = movies;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [season, setSeason] = useState(0);
@@ -48,10 +49,6 @@ const Home = () => {
   const [type, setType] = useState("movie");
   const isEpisode = type === "episode";
 
-  const {
-    movies: { loading, data }
-  } = movies;
-
   useEffect(() => {
     dispatch(fetchMovies({ name, pageNumber: 1, year, type }));
   }, []);
@@ -60,9 +57,9 @@ const Home = () => {
     if (data.Type === "episode") {
       navigate(`/movie/${data.imdbID}`);
     }
-  }, [data]);
+  }, [data, navigate]);
 
-  const onPageChange = (current, pageSize) => {
+  const onPageChange = (current) => {
     setCurrentPage(current);
     const payload = { name, pageNumber: current, year, type, season, episode };
     dispatch(fetchMovies(payload));
@@ -98,7 +95,11 @@ const Home = () => {
         >
           {types.map((type) => {
             return (
-              <Option style={{ textTransform: "capitalize" }} value={type}>
+              <Option
+                key={type}
+                style={{ textTransform: "capitalize" }}
+                value={type}
+              >
                 {type}
               </Option>
             );
@@ -141,6 +142,9 @@ const Home = () => {
         bordered
         dataSource={data.Episodes || data.Search}
         style={{ padding: 16 }}
+        rowKey={(keys, i) => {
+          return `${keys.Poster}${i}`;
+        }}
         pagination={{
           total: data.totalResults,
           showSizeChanger: false,

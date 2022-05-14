@@ -25,42 +25,28 @@ export const fetchMovies = createAsyncThunk(
 );
 
 const initialState = {
-  movies: {
-    data: [],
-    loading: true
-  }
+  data: [],
+  loading: false
 };
 
 const movieSlice = createSlice({
   name: "movies",
   initialState,
   extraReducers: {
-    [fetchMovies.pending]: (state) => {
+    [fetchMovies.pending]: () => {
       return {
-        ...state,
-        movies: {
-          data: [],
-          loading: true
-        }
+        data: [],
+        loading: true
       };
     },
-    [fetchMovies.fulfilled]: (state, { payload }) => {
+    [fetchMovies.fulfilled]: (_, { payload }) => {
       return {
-        ...state,
-        movies: {
-          data: payload,
-          loading: false
-        }
+        data: payload,
+        loading: false
       };
     },
-    [fetchMovies.rejected]: (state, { payload }) => {
-      return {
-        ...state,
-        movies: {
-          data: payload,
-          loading: false
-        }
-      };
+    [fetchMovies.rejected]: () => {
+      return initialState;
     }
   }
 });

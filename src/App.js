@@ -6,16 +6,12 @@ import "antd/dist/antd.css";
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/movie/:imdbID" element={<MovieDetail />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/movie/:imdbID" element={<MovieDetail />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -1,65 +1,70 @@
 import React, { useEffect } from "react";
 import "./MovieDetail.scss";
 import { useParams } from "react-router";
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchMovieDetail,
   getSelectedMovie
 } from "../../store/movies/MovieDetailSlice.js";
-import { Card, Skeleton } from "antd";
-const { Meta } = Card;
+import { Skeleton, PageHeader } from "antd";
 
 const MovieDetail = () => {
-  const { imdbID } = useParams();
+  const params = useParams();
   const dispatch = useDispatch();
-  const movieDetail = useSelector(getSelectedMovie);
-  const { data, loading } = movieDetail;
+  const navigate = useNavigate();
+
+  const { imdbID } = params;
+  const { data, loading } = useSelector(getSelectedMovie);
 
   useEffect(() => {
-    if (imdbID) {
-      dispatch(fetchMovieDetail(imdbID));
-    }
-  }, [imdbID, dispatch]);
+    dispatch(fetchMovieDetail(imdbID));
+  }, [dispatch, imdbID]);
 
   return (
     <div>
       {loading ? (
         <Skeleton active />
       ) : (
-        <div className="movie-detail">
-          <Card hoverable cover={<img src={data.Poster} alt={data.Title} />}>
-            <Meta title={data.Title} />
-          </Card>
-          <div className="movie-info">
-            <div className="movie-rating">
-              <p>
-                IMDB Rating: {data.imdbRating} / {data.imdbVotes}
-              </p>
-              <p>Time : {data.Runtime}</p>
-              <p>Year : {data.Year}</p>
-            </div>
-            <br />
-            <div className="movie-plot"> {data.Plot}</div>
-            <br />
-            <div className="movie-detail-info">
-              <p>
-                Director: <span>{data.Director}</span>
-              </p>
-              <p>
-                Stars: <span>{data.Actors}</span>
-              </p>
-              <p>
-                Generes: <span>{data.Genre}</span>
-              </p>
-              <p>
-                Languages: <span>{data.Language}</span>
-              </p>
-              <p>
-                Awards: <span>{data.Awards}</span>
-              </p>
+        <>
+          <PageHeader 
+            onBack={() => navigate(-1)}
+            title={data.Title}
+            className="site-page-header"
+          />
+          <div className="movie-detail">
+            <img className="movie-image" src={data.Poster} alt={data.Title} />
+            <div className="movie-info">
+              <div className="movie-rating">
+                <p>
+                  IMDB Rating: {data.imdbRating} / {data.imdbVotes}
+                </p>
+                <p>Time : {data.Runtime}</p>
+                <p>Year : {data.Year}</p>
+              </div>
+              <br />
+              <div className="movie-plot"> {data.Plot}</div>
+              <br />
+              <div className="movie-detail-info">
+                <p>
+                  Director: <span>{data.Director}</span>
+                </p>
+                <p>
+                  Stars: <span>{data.Actors}</span>
+                </p>
+                <p>
+                  Generes: <span>{data.Genre}</span>
+                </p>
+                <p>
+                  Languages: <span>{data.Language}</span>
+                </p>
+                <p>
+                  Awards: <span>{data.Awards}</span>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
